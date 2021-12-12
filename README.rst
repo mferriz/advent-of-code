@@ -42,6 +42,6 @@ After installation, it is simple to execute a program by doing
 ``aoc YYYY.DD``, where YYYY is the year of the puzzles, and DD corresponds
 to the day.
 
-For example, to execute test 10 of year 2021, run ``aoc 2021.10``.
+For example, to execute day 10 of year 2021, run ``aoc 2021.10``.
 
 
