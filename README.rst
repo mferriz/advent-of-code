@@ -24,7 +24,7 @@ Installation
 The following instructions can help to install this code in Linux operating
 systems, or Mac OS.
 
-.. code-block bash
+.. code-block:: bash
 
    git clone git@github.com:mferriz/advent-of-code.git
    cd advent-of-code
