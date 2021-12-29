@@ -3,25 +3,25 @@
 
 """Advent of Code 2021, day twenty four."""
 
-INPUT_FILE = 'data/day_24.txt'
-
 from typing import List
+
+INPUT_FILE = 'data/day_24.txt'
 
 
 class ArithmeticLogicUnit:
     """Submarine ALU."""
 
-    def __init__(self, w: int = 0, x: int = 0, y: int = 0, z: int = 0):
+    def __init__(self) -> None:
         """Initialize the ALU."""
-        self.var = {'w': w, 'x': x, 'y': y, 'z': z}
+        self.var = {'w': 0, 'x': 0, 'y': 0, 'z': 0}
 
-    def execute(self, instructions: List[str], input: str) -> None:
+    def execute(self, instructions: List[str], user_input: str) -> None:
         """Execute a program."""
         for line in instructions:
             if line.startswith('inp'):
                 _operation, operand = line.split()
-                self.var[operand] = int(input[0])
-                input = input[1:]
+                self.var[operand] = int(user_input[0])
+                user_input = user_input[1:]
             else:
                 operation, op_1, op_2 = line.split()
                 if op_2 in self.var:
@@ -40,13 +40,12 @@ class ArithmeticLogicUnit:
                     self.var[op_1] = 1 if (self.var[op_1] == op_2) else 0
                 else:
                     raise ValueError('Imposible operation')
-                    
+
 
 def main() -> None:
     """Read program and find MONAD model numbers."""
-
     program = []
-    with open(INPUT_FILE) as input_file:
+    with open(INPUT_FILE, encoding='utf-8') as input_file:
         program = [line.strip() for line in input_file]
 
     # This particular puzzle involves reverse engineering the input file
@@ -88,5 +87,3 @@ def main() -> None:
 
 
 main()
-        
-    

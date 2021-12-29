@@ -16,16 +16,16 @@ class SnailfishNumber:
     def __init__(self, number: Union[str, list]) -> None:
         """Initialize a Snailfish number from a string."""
         if isinstance(number, list):
-            self._number = copy.deepcopy(number)
+            self.number = copy.deepcopy(number)
         else:
-            self._number = (
+            self.number = (
                 ast.literal_eval(number)
             )
 
     def magnitude(self, term: list = None) -> int:
         """Obtain the magnitude of a snailfish number."""
         if term is None:
-            term = self._number
+            term = self.number
         a_magnitude = 0
         b_magnitude = 0
         if isinstance(term[0], list):
@@ -38,18 +38,14 @@ class SnailfishNumber:
             b_magnitude = term[1]
         return 3 * a_magnitude + 2 * b_magnitude
 
-    def apply_explosion_right(self,
-                              term: list,
-                              number: int):
+    def apply_explosion_right(self, term: list, number: int) -> None:
         """Apply explosion to leftmost number."""
         if isinstance(term[0], list):
             self.apply_explosion_right(term[0], number)
         else:
             term[0] += number
 
-    def apply_explosion_left(self,
-                             term: list,
-                             number: int):
+    def apply_explosion_left(self, term: list, number: int) -> None:
         """Apply explosion to rightmost number."""
         if isinstance(term[1], list):
             self.apply_explosion_left(term[1], number)
@@ -104,7 +100,7 @@ class SnailfishNumber:
             return a_term
         return term
 
-    def _split(self, term: list, flags: list):
+    def _split(self, term: list, flags: list) -> None:
         """Split a snailfish number."""
         if 'split' not in flags:
             if isinstance(term[0], list):
@@ -121,10 +117,10 @@ class SnailfishNumber:
                     flags.append('split')
                     term[1] = [term[1] // 2, term[1] - term[1] // 2]
 
-    def add(self, number: "SnailfishNumber") -> "SnailfishNumber":
+    def add(self, number: 'SnailfishNumber') -> 'SnailfishNumber':
         """Add two snailfish numbers and return a snailfish."""
-        accumulator = [copy.deepcopy(self._number),
-                       copy.deepcopy(number._number)]
+        accumulator = [copy.deepcopy(self.number),
+                       copy.deepcopy(number.number)]
         # Reduce
         while True:
             flags = []
@@ -137,7 +133,7 @@ class SnailfishNumber:
 
     def __str__(self) -> str:
         """String representation of a snailfish number."""
-        return str(self._number)
+        return str(self.number)
 
 
 def main() -> None:

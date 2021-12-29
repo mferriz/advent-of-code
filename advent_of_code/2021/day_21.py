@@ -12,13 +12,15 @@ UNIVERSE_MULTIPLIER = [1, 3, 6, 7, 6, 3, 1]
 
 class GameState:
     """State of a game."""
+    cache = {}
 
-    def __init__(self, space_index: List[int]):
+    def __init__(self, space_index: List[int]) -> None:
+        """Initialize game state."""
         self.player_up = 0
         self.space_index = [space_index[0], space_index[1]]
         self.score = [0, 0]
 
-    def roll(self, roll: int) -> "GameState":
+    def roll(self, roll: int) -> 'GameState':
         """Roll dice."""
         new_state = GameState([self.space_index[0], self.space_index[1]])
         new_state.space_index[self.player_up] = \
@@ -34,7 +36,7 @@ class GameState:
         """Whether it is a final state or not."""
         return self.score[0] >= 21 or self.score[1] >= 21
 
-    def as_index(self) -> int:
+    def __hash__(self) -> int:
         """Return the state as an index for a cache table."""
         bits = (
             f'{self.player_up}'
@@ -50,6 +52,32 @@ class GameState:
             f'Player 2 at {self.space_index[1] + 1}, score: {self.score[1]}. '
             f'Player up: {self.player_up + 1}.'
         )
+
+    def go_deep(self) -> Tuple[int, int]:
+        """Go a deeper game state."""
+        index = hash(self)
+        if index in self.cache:
+            return self.cache[index]
+
+        if not self.is_over():
+            player_1_acc_wins = 0
+            player_2_acc_wins = 0
+            for dice in range(3, 10):
+                next_state = self.roll(dice)
+                player_1_wins, player_2_wins = next_state.go_deep()
+                player_1_acc_wins += (
+                    player_1_wins * UNIVERSE_MULTIPLIER[dice - 3]
+                )
+                player_2_acc_wins += (
+                    player_2_wins * UNIVERSE_MULTIPLIER[dice - 3]
+                )
+                self.cache[index] = (player_1_acc_wins, player_2_acc_wins)
+        else:
+            if self.score[0] >= 21:
+                self.cache[index] = (1, 0)
+            else:
+                self.cache[index] = (0, 1)
+        return self.cache[index]
 
 
 def deterministic_practice() -> None:
@@ -79,37 +107,10 @@ def deterministic_practice() -> None:
           f'{losing_score * die_rolled}')
 
 
-dirac_cache = {}
-
-
-def dirac_go_deep(game: GameState) -> Tuple[int, int]:
-    """Go a game state deeper."""
-    global dirac_cache
-    index = game.as_index()
-    if index in dirac_cache:
-        return dirac_cache[index]
-
-    if not game.is_over():
-        player_1_acc_wins = 0
-        player_2_acc_wins = 0
-        for dice in range(3, 10):
-            next_state = game.roll(dice)
-            player_1_wins, player_2_wins = dirac_go_deep(next_state)
-            player_1_acc_wins += player_1_wins * UNIVERSE_MULTIPLIER[dice - 3]
-            player_2_acc_wins += player_2_wins * UNIVERSE_MULTIPLIER[dice - 3]
-        dirac_cache[index] = (player_1_acc_wins, player_2_acc_wins)
-    else:
-        if game.score[0] >= 21:
-            dirac_cache[index] = (1, 0)
-        else:
-            dirac_cache[index] = (0, 1)
-    return dirac_cache[index]
-
-
-def dirac_game() -> None:
+def multiple_universe_game() -> None:
     """Playing board game with Dirac Die."""
     game = GameState([4, 5])  # Game Input
-    player_1_wins, player_2_wins = dirac_go_deep(game)
+    player_1_wins, player_2_wins = game.go_deep()
     if player_1_wins >= player_2_wins:
         wins_in_more_universes = player_1_wins
     else:
@@ -118,4 +119,4 @@ def dirac_game() -> None:
 
 
 deterministic_practice()
-dirac_game()
+multiple_universe_game()

@@ -4,11 +4,13 @@
 """Advent of Code 2021, day twelve."""
 
 import copy
+from typing import Dict, List
 
 INPUT_FILE = 'data/day_12.txt'
 
 
-def find_routes(segments, route, rule):
+def find_routes(segments: Dict[str, List[str]],
+                route: List[str], rule: str) -> List[List[str]]:
     """Find complete routes from start to finish."""
     routes = []
     for next_segment in segments[route[-1]]:

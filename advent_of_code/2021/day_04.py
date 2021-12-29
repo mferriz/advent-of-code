@@ -52,7 +52,7 @@ class BingoCard:
         return output.strip()
 
     def mark_number(self, number: int) -> bool:
-        """Mark a bingo number. Return True if bingo!***"""
+        """Mark a bingo number and return True if there is a win."""
         bingo_match = bitarray('11111')
         if number in self._numbers:
             index = self._numbers.index(number)
@@ -75,7 +75,6 @@ class BingoCard:
 
 def parse_input(filename: str) -> Tuple[List[int], List[BingoCard]]:
     """Parse input file and return a list of numbers drawn and bingo cards."""
-
     numbers_drawn: List[int] = []
     bingo_cards: List[BingoCard] = []
     bingo_card_numbers: List[int] = []
@@ -86,9 +85,9 @@ def parse_input(filename: str) -> Tuple[List[int], List[BingoCard]]:
                 continue
             # First line contains drawn numbers for bingo.
             if not numbers_drawn:
-                numbers_drawn = list(map(int, line.split(',')))
+                numbers_drawn = [int(x) for x in line.split(',')]
             else:
-                bingo_card_line: List[int] = list(map(int, line.split()))
+                bingo_card_line = [int(x) for x in line.split()]
                 bingo_card_numbers = bingo_card_numbers + bingo_card_line
                 if len(bingo_card_numbers) == 25:
                     bingo_card = BingoCard(bingo_card_numbers)
@@ -111,8 +110,6 @@ def main() -> None:
                 # Only print first and last boards.
                 if len(bingo_cards) in (1, board_count):
                     part = 'Two' if len(bingo_cards) == 1 else 'One'
-                    # print(f'Bingo in card: {bingo_card_number}\n')
-                    # print(f'{str(bingo_card)}\n')
                     print(f'Part {part}: Score: {bingo_card.score()}')
                 boards_to_remove.append(bingo_card_number)
         for bingo_card_number in sorted(boards_to_remove, key=int,

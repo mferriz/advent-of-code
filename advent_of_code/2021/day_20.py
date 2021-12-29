@@ -24,7 +24,6 @@ def obtain_spot_enhancing_index(image: List[bitarray],
 def enhance_image(image: List[bitarray], border: int,
                   algorithm: bitarray) -> Tuple[List[bitarray], int]:
     """Enhance an image presented as a list of bitarrays."""
-
     work_image = []
     # Encase new image in border of two pixels.
     # Start adding top border.
@@ -53,27 +52,32 @@ def enhance_image(image: List[bitarray], border: int,
     return new_image, new_border
 
 
-with open(INPUT_FILE, encoding='utf-8') as input_file:
-    algorithm, input_image = input_file.read().split('\n\n')
+def main() -> None:
+    """Enhancing a trench map using a special algorithm."""
+    with open(INPUT_FILE, encoding='utf-8') as input_file:
+        algorithm, input_image = input_file.read().split('\n\n')
     # Remove carriage returns in algorithm; replace dots for zeroes
     # and # to ones.
     algorithm = algorithm.replace('\n', '').replace('.', '0').replace('#', '1')
-enhancing_algorithm = bitarray(algorithm)
+    enhancing_algorithm = bitarray(algorithm)
 
-image = [bitarray(x.replace('.', '0').replace('#', '1'))
-         for x in input_image.splitlines()]
-border = 0
-for enhance_steps in range(50):
-    new_image, border = enhance_image(image, border, enhancing_algorithm)
-    if enhance_steps == 1:
-        count_lit = 0
-        for line in new_image:
-            count_lit += line.count()
-        print(f'Part One: Count of pixels lit after enhancing twice: '
-              f'{count_lit}')
-    image = new_image
-count_lit = 0
-for line in new_image:
-    count_lit += line.count()
-print(f'Part Two: Count of pixels lit after enhancing fifty times: '
-      f'{count_lit}')
+    image = [bitarray(x.replace('.', '0').replace('#', '1'))
+             for x in input_image.splitlines()]
+    border = 0
+    for enhance_steps in range(50):
+        new_image, border = enhance_image(image, border, enhancing_algorithm)
+        if enhance_steps == 1:
+            count_lit = 0
+            for line in new_image:
+                count_lit += line.count()
+            print(f'Part One: Count of pixels lit after enhancing twice: '
+                  f'{count_lit}')
+        image = new_image
+    count_lit = 0
+    for line in new_image:
+        count_lit += line.count()
+    print(f'Part Two: Count of pixels lit after enhancing fifty times: '
+          f'{count_lit}')
+
+
+main()

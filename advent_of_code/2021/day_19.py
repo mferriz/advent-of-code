@@ -82,6 +82,7 @@ def correlate_scanners(
                 offset = correlate(scanner_a[axis0],
                                    scanner_b_reverse[axis1])
                 if offset is not None:
+                    # pylint: disable=invalid-unary-operand-type
                     offsets[axis0] = -offset
                     offsets_type[axis0] = f'r{axis[axis1]}'
     return (offsets, offsets_type)
@@ -141,14 +142,14 @@ def correlate_all(beacon_pos: list, scanner_reports: list,
                   scanner_pos: list) -> Tuple[list, int]:
     """Correlate and normalize scanner reports."""
     correlated = [0]
-    not_correlated = [x for x in range(1, len(beacon_pos))]
+    not_correlated = list(range(1, len(beacon_pos)))
     correlation_offsets = {0: [0, 0, 0]}
     correlation_offsets_types = {0: ['x', 'y', 'z']}
     correlation_base = {0: 0}
     change = True
     correlation_cache = []
     scanner_pos[0] = (0, 0, 0)
-    for scanner in range(len(beacon_pos)):
+    for _scanner in range(len(beacon_pos)):
         correlation_cache.append([False for _x in range(len(beacon_pos))])
     while len(not_correlated) and change:
         change = False

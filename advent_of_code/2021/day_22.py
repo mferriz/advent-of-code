@@ -50,7 +50,7 @@ class Cuboid:
             overlap = range(dim_2.start, dim_1.stop)
         return overlap
 
-    def intersection(self, cuboid: "Cuboid") -> Optional["Cuboid"]:
+    def intersection(self, cuboid: 'Cuboid') -> Optional['Cuboid']:
         """Find if there is any intersection between cuboids."""
         intersection_cuboid = None
         x_overlap = self._dimension_overlap(self.x, cuboid.x)
@@ -62,7 +62,6 @@ class Cuboid:
                     intersection_cuboid = Cuboid(x_overlap,
                                                  y_overlap,
                                                  z_overlap)
-        # pdb.set_trace()
         return intersection_cuboid
 
 
@@ -86,7 +85,6 @@ def lit_cube_count(instructions: List[Tuple[str, Cuboid]],
         for lit_cuboid in lit_cuboids:
             compensation_cuboid = cuboid.intersection(lit_cuboid)
             if compensation_cuboid is not None:
-                # pdb.set_trace()
                 # This is for compensate double counting.
                 lit_count -= compensation_cuboid.cube_count
                 new_dark_cuboids.append(compensation_cuboid)
@@ -94,7 +92,6 @@ def lit_cube_count(instructions: List[Tuple[str, Cuboid]],
         for dark_cuboid in dark_cuboids:
             compensation_cuboid = cuboid.intersection(dark_cuboid)
             if compensation_cuboid is not None:
-                # pdb.set_trace()
                 # Compensate double counting
                 lit_count += compensation_cuboid.cube_count
                 new_lit_cuboids.append(compensation_cuboid)

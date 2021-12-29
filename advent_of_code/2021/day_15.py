@@ -23,7 +23,6 @@ class PathFinder:
 
     def calculate_risk(self, row: int, col: int) -> None:
         """Implementation of Dijkstra shortest path in a matrix."""
-
         # Obtain unvisited neighbors with same row or same column
         neighbors = []
         for neighbor_row in range(row - 1, row + 2):
@@ -44,7 +43,6 @@ class PathFinder:
 
     def least_risk(self) -> int:
         """Obtain least risk."""
-
         dest_row = self.matrix.shape[0] - 1
         dest_col = self.matrix.shape[1] - 1
         while (not numpy.all(self.visited)

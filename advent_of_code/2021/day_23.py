@@ -26,18 +26,16 @@ class AmphipodDiagram:
 
     def is_final(self) -> bool:
         """Report whether the amphipod diagram is final."""
-        for name in ['A', 'B', 'C', 'D']:
-            if self.group[name] != name * self.group_depth:
-                return False
-        return True
+        return all([self.group[name] == name * self.group_depth
+                    for name in ['A', 'B', 'C', 'D']])
 
     def perform_forced_moves(self) -> int:
         """Perform a series of moves that are forced because of least cost.
 
-           Some times there are moves of least cost, like moving an amphipod
-           from the hall to its group or moving an amphipod from a group
-           to its final group. The moves have to be made right away to clear
-           space.
+        Some times there are moves of least cost, like moving an amphipod
+        from the hall to its group or moving an amphipod from a group
+        to its final group. The moves have to be made right away to clear
+        space.
         """
         energy_spent = 0
         keep_moving = True
@@ -49,8 +47,10 @@ class AmphipodDiagram:
             for position, amphipod in enumerate(self.hall):
                 if amphipod == '.':
                     continue
-                # Amphipod group must be empty or only containing same elements.
-                if self.group[amphipod] == amphipod * len(self.group[amphipod]):
+                # Amphipod group must be empty or only containing same
+                # elements.
+                if self.group[amphipod] == (
+                        amphipod * len(self.group[amphipod])):
                     # Make sure the amphipod has a clear path to intersection
                     intersection = self.hall_intersection[amphipod]
                     if intersection > position:
@@ -67,7 +67,7 @@ class AmphipodDiagram:
                         )
                         self.hall = (
                             self.hall[0:position] + '.'
-                            + self.hall[position+1:]
+                            + self.hall[position + 1:]
                         )
                         self.group[amphipod] += amphipod
                         keep_moving = True
@@ -84,7 +84,7 @@ class AmphipodDiagram:
                     # Final group must be empty or contain same elements
                     if (amphipod != group_name
                         and self.group[amphipod] ==
-                        amphipod * len(self.group[amphipod])):
+                            amphipod * len(self.group[amphipod])):
                         # There must be a clear path between intersections
                         src_inter = self.hall_intersection[group_name]
                         dst_inter = self.hall_intersection[amphipod]
@@ -97,10 +97,13 @@ class AmphipodDiagram:
                             move_count += 1
                             steps = (
                                 len(hall_segment)
-                                + self.group_depth - len(self.group[group_name])
+                                + self.group_depth -
+                                len(self.group[group_name])
                                 + self.group_depth - len(self.group[amphipod])
                             )
-                            self.group[group_name] = self.group[group_name][:-1]
+                            self.group[group_name] = (
+                                self.group[group_name][:-1]
+                            )
                             self.group[amphipod] += amphipod
                             energy_spent += (
                                 self.energy_per_step[amphipod] * steps
@@ -142,7 +145,7 @@ class AmphipodDiagram:
                         amphipod = new_diagram.group[name][-1]
                         new_diagram.hall = (
                             self.hall[0:candidate] + amphipod
-                            + self.hall[candidate+1:]
+                            + self.hall[candidate + 1:]
                         )
                         new_diagram.group[name] = new_diagram.group[name][:-1]
                         energy_spent = (
@@ -152,11 +155,9 @@ class AmphipodDiagram:
                         )
                         if energy_spent < least_energy_spent:
                             least_energy_spent = energy_spent
-                       
         self.cache[hash(self)] = least_energy_spent
         return least_energy_spent
 
-                    
     def __hash__(self) -> int:
         """Hash of a diagram object."""
         string = (
@@ -164,10 +165,10 @@ class AmphipodDiagram:
             f"{self.group['B']:4}"
             f"{self.group['C']:4}"
             f"{self.group['D']:4}"
-            f"{self.hall}"
+            f'{self.hall}'
         )
         return hash(string)
-        
+
     def __str__(self) -> str:
         """Return the string representation of the diagram."""
         group_section = ''
@@ -183,10 +184,10 @@ class AmphipodDiagram:
             else:
                 pad = '  '
             group_section += (
-                f"{pad}#{group_A[group_element]}"
-                f"#{group_B[group_element]}"
-                f"#{group_C[group_element]}"
-                f"#{group_D[group_element]}#{pad}\n"
+                f'{pad}#{group_A[group_element]}'
+                f'#{group_B[group_element]}'
+                f'#{group_C[group_element]}'
+                f'#{group_D[group_element]}#{pad}\n'
             )
 
         diagram = (
@@ -196,10 +197,16 @@ class AmphipodDiagram:
             f'  #########'
         ).strip()
         return diagram
-            
 
-diagram = AmphipodDiagram(groups={'A': 'BC', 'B': 'CB', 'C': 'AD', 'D': 'AD'})
-print(f'Part One: Least energy for diagram: {diagram.next_move()}')
-diagram = AmphipodDiagram(groups={'A': 'BDDC', 'B': 'CBCB',
-                                  'C': 'AABD', 'D': 'ACAD'})
-print(f'Part Two: Least energy for diagram: {diagram.next_move()}')
+
+def main() -> None:
+    """Calculate least energy used for amphipod diagrams."""
+    diagram = AmphipodDiagram(groups={'A': 'BC', 'B': 'CB',
+                                      'C': 'AD', 'D': 'AD'})
+    print(f'Part One: Least energy for diagram: {diagram.next_move()}')
+    diagram = AmphipodDiagram(groups={'A': 'BDDC', 'B': 'CBCB',
+                                      'C': 'AABD', 'D': 'ACAD'})
+    print(f'Part Two: Least energy for diagram: {diagram.next_move()}')
+
+
+main()
