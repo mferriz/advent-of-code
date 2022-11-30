@@ -1,6 +1,101 @@
 [build-system]
-requires = [
-    'setuptools >= 58.4.0',
-    'wheel >= 0.37.0',
+requires = ["pdm-pep517"]
+build-backend = "pdm.pep517.api"
+
+[project]
+name = "advent-of-code"
+version = "2022.11.30"
+description = "Programmatic Solutions of Advent Of Code Challenges and Puzzles"
+authors = [
+    {name = "Mario A. Ferriz"},
+    {email = "mferriz@yahoo.com"},
 ]
-build-backend = 'setuptools.build_meta'
+dependencies = [
+    "bitarray>=2.6.0",
+    "numpy>=1.23.0",
+]
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+readme = {file = "README.rst", content-type = "text/x-rst"}
+keywords = ["advent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Typing :: Typed"
+]
+
+[project.urls]
+Homepage = "https://github.com/mferriz/advent-of-code"
+
+[project.scripts]
+aoc = 'aoc:main'
+
+[project.optional-dependencies]
+dev = [
+    "autopep8>=2.0.0",
+    "check-wheel-contents>=0.4.0",
+    "flake8>=5.0.4",
+    "flake8-annotations>=2.9.1",
+    "flake8-builtins>=2.0.1",
+    "flake8-bugbear>=22.10.27",
+    "flake8-comprehensions>=3.10.1",
+    "flake8-docstrings>=1.6.0",
+    "flake8-secure-coding-standard>=1.3.0",
+    "flake8-simplify>=0.19.3",
+    "jedi>=0.18.2",
+    "mccabe>=0.6.1",
+    "mypy>=0.991",
+    "pycodestyle>=2.9.1",
+    "pydocstyle>=6.1.1",
+    "pyflakes>=2.5.0",
+    "pylint>=2.15.7",
+    "python-lsp-server>=1.6.0",
+    "rope>=1.5.1",
+    "twine>=4.0.1",
+    "yapf>=0.32.0",
+    "pytest>=7.1.2",
+]
+
+[tool.pdm]
+
+[tool.pylint.design]
+max-args = 9
+
+[tool.pylint.format]
+max-line-length = 79
+max-module-lines = 10000
+
+[tool.pylint.master]
+py-version = 3.8
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.check_elif",
+    "pylint.extensions.code_style",
+    "pylint.extensions.comparetozero",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.confusing_elif",
+    "pylint.extensions.docparams",
+    "pylint.extensions.emptystring",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.set_membership",
+    "pylint.extensions.typing"
+]
+
+[tool.pylint.messages_control]
+disable = "fixme,R0902,R0903,R0904,R0911,R0912,R0913,R0914,R0915,R0916,R1702,R5601,R0801"
+
+[tool.pylint.similarities]
+min-similarity-lines = 50
+
+[tool.pylint.typecheck]
+ignored-classes = "socket"

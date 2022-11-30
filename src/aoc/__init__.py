@@ -15,7 +15,7 @@ Usage: aoc <YYYY.DD>
 Execute a program that will solve the puzzle for Advent of Code of year YYYY
 and day DD.
 
-(C) 2021 Mario A. Ferriz. All rights reserved.
+(C) 2021-2002 Mario A. Ferriz. All rights reserved.
 """
 
 
@@ -26,20 +26,16 @@ def main() -> None:
         sys.exit(1)
 
     # Validate input
-    match = PUZZLE.match(sys.argv[1])
-    if match is None:
+    if (match := PUZZLE.match(sys.argv[1])) is None:
         print(f'{USAGE}\nPlease provide the puzzle number in the '
               f'format YYYY.DD')
         sys.exit(1)
 
     # Obtain the base directory of the puzzle.
-    cwd = pathlib.Path(__file__).expanduser().parent.parent \
-        / 'advent_of_code' / f"{match.group('year')}"
+    cwd = pathlib.Path(__file__).expanduser().parent \
+        / f"{match.group('year')}"
     executable = cwd / f"day_{match.group('day')}.py"
 
     # Execute program
-    program = subprocess.run(executable, cwd=cwd)
+    program = subprocess.run(executable, cwd=cwd, check=True)
     sys.exit(program.returncode)
-
-
-main()

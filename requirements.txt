@@ -1,2 +1,0 @@
-bitarray>=2.3.4
-numpy>=1.21.4
