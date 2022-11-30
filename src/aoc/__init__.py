@@ -15,7 +15,7 @@ Usage: aoc <YYYY.DD>
 Execute a program that will solve the puzzle for Advent of Code of year YYYY
 and day DD.
 
-(C) 2021-2002 Mario A. Ferriz. All rights reserved.
+(C) 2021-2022 Mario A. Ferriz. All rights reserved.
 """
 
 
