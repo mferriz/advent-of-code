@@ -31,7 +31,6 @@ systems, or Mac OS.
    python3 -m venv aoc
    source aoc/bin/activate
    pip install -U pip
-   pip install -r requirements.txt
    pip install -e .
    
 
