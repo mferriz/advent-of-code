@@ -12,6 +12,20 @@ OPERATION = {
     'L': (-1, 0),
     'D': (0, -1)
 }
+FOLLOW = {
+    (2, 0): (1, 0),
+    (-2, 0): (-1, 0),
+    (0, 2): (0, 1),
+    (0, -2): (0, -1),
+    (1, 2): (1, 1),
+    (1, -2): (1, -1),
+    (-1, 2): (-1, 1),
+    (-1, -2): (-1, -1),
+    (2, 1): (1, 1),
+    (2, -1): (1, -1),
+    (-2, 1): (-1, 1),
+    (-2, -1): (-1, -1)
+}
 
 
 def main() -> None:
@@ -20,15 +34,14 @@ def main() -> None:
         tail_locations = set()
         head = (0, 0)
         tail = (0, 0)
+        tail_locations.add(tail)
         for line in input_file:
             instruction, quantity = line.strip().split(' ')
             for _ in range(int(quantity)):
-                old_head = head
                 head = tuple(numpy.add(head, OPERATION[instruction]))
-                delta = tuple(numpy.subtract(head, tail))
-                if abs(delta[0]) > 1 or abs(delta[1]) > 1:
-                    tail = old_head
-                tail_locations.add(tail)
+                if (delta := tuple(numpy.subtract(head, tail))) in FOLLOW:
+                    tail = tuple(numpy.add(tail, FOLLOW[delta]))
+                    tail_locations.add(tail)
         print(f'Part One: Positions tail of rope visit: {len(tail_locations)}')
 
 
